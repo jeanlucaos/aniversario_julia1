@@ -8,6 +8,17 @@ const music = document.getElementById('bg-music');
 // Função auxiliar 'Promessa' para pausas
 const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// --- Função para Pré-Carregar Imagem ---
+// Isso garante que a foto exista antes de tentarmos mostrá-la
+const carregarImagem = (src) => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = resolve; 
+        img.onerror = resolve; // Segue mesmo se der erro (para não travar)
+    });
+};
+
 // --- 1. VERIFICAÇÃO DE SENHA ---
 function verificarSenha() {
     const input = document.getElementById('password-input').value.toLowerCase().trim();
@@ -17,7 +28,6 @@ function verificarSenha() {
         errorMessage.classList.add('hidden');
         document.querySelector('.hello-container').classList.add('hidden');
         
-        // Toca a música (hack para mobile)
         music.volume = 0.5; 
         music.play().catch(e => console.log("Erro no autoplay de áudio:", e));
 
@@ -134,26 +144,40 @@ async function iniciarIntro() {
     introContent.classList.add('visible');
     await esperar(5000);
     introContent.classList.remove('visible');
-    await esperar(500);
+    await esperar(1000); // Pausa para transição suave
 
-    // --- PARTE 11: Chuva de 50 Fotos ---
-    // ATENÇÃO: Extensão alterada para .jpeg conforme solicitado
-    let tempoDeExibicao = 1000; 
+    // --- PARTE 11: Chuva de 50 Fotos (Melhorada) ---
+    
+    // Começa com 2 segundos por foto (bem tranquilo)
+    let tempoDeExibicao = 2000; 
+    // Limite mínimo de 1.2 segundos (para dar tempo de carregar e ver)
+    const tempoMinimo = 1200;   
 
     for (let i = 1; i <= 50; i++) {
-        // Define o tempo: última foto fica 3s
-        let tempoAtual = (i === 50) ? 3000 : tempoDeExibicao;
+        const src = `imagens/casal/${i}.jpeg`;
 
-        introContent.innerHTML = `<img src="imagens/casal/${i}.jpeg" style="max-height: 60vh; border: 2px solid #fff;">`;
-        introContent.classList.add('visible');
+        // 1. Pré-carrega a imagem ANTES de colocá-la na tela
+        // Isso evita que a tela fique preta ou piscando
+        await carregarImagem(src);
+
+        // 2. Define o tempo: Última foto fica 5 segundos
+        let tempoAtual = (i === 50) ? 5000 : tempoDeExibicao;
+
+        introContent.innerHTML = `<img src="${src}" style="max-height: 60vh; border: 2px solid #fff;">`;
+        introContent.classList.add('visible'); // Fade IN
         
+        // 3. Aguarda o tempo de exibição
         await esperar(tempoAtual);
         
-        // Aceleração progressiva
+        // 4. Se não for a última, faz o Fade OUT
         if (i < 50) {
             introContent.classList.remove('visible');
-            await esperar(100); 
-            tempoDeExibicao = Math.max(100, tempoDeExibicao * 0.9);
+            
+            // 5. Espera a animação do CSS terminar (1000ms = 1s)
+            await esperar(1000); 
+            
+            // 6. Aceleração suave (reduz apenas 5% do tempo a cada foto)
+            tempoDeExibicao = Math.max(tempoMinimo, tempoDeExibicao * 0.95);
         }
     }
 }

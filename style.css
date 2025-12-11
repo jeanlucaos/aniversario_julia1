@@ -114,6 +114,7 @@ h1 {
     justify-content: center;
     flex-direction: column;
     opacity: 0;
+    /* TRANSIÇÃO MAIS SUAVE: 1 segundo com ease-in-out */
     transition: opacity 1s ease-in-out;
     text-align: center;
 }
