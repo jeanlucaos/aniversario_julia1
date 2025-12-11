@@ -17,7 +17,7 @@ function verificarSenha() {
         errorMessage.classList.add('hidden');
         document.querySelector('.hello-container').classList.add('hidden');
         
-        // MÚSICA COMEÇA AGORA (junto com a contagem)
+        // MÚSICA COMEÇA AGORA
         music.volume = 0.5; 
         music.play().catch(e => console.log("Erro no autoplay de áudio:", e));
 
@@ -36,10 +36,9 @@ async function iniciarContagem() {
 
     for (let i = 3; i > 0; i--) {
         countdownNumber.textContent = i;
-        await esperar(1000); // 1 segundo
+        await esperar(1000); 
     }
 
-    // Fim da contagem -> Vai para intro
     countdownContainer.classList.add('hidden');
     iniciarIntro();
 }
@@ -48,7 +47,7 @@ async function iniciarContagem() {
 async function iniciarIntro() {
     introContainer.classList.remove('hidden');
 
-    // --- PARTE 1: Títulos ---
+    // PARTE 1: Títulos
     introContent.innerHTML = "<h2>✨ Os 27 da Jú ✨</h2>";
     await esperar(100); 
     introContent.classList.add('visible'); 
@@ -56,14 +55,14 @@ async function iniciarIntro() {
     introContent.classList.remove('visible'); 
     await esperar(1000); 
 
-    // --- PARTE 2: Texto Maresias ---
+    // PARTE 2: Texto Maresias
     introContent.innerHTML = "<p>Essa história começa em Maresias, litoral de São Paulo, na comemoração dos 26, em que Júlia agradece mais um ano de vida e pede muitas bençãos para o ano que vinha aí...</p>";
     introContent.classList.add('visible'); 
     await esperar(6000); 
     introContent.classList.remove('visible'); 
     await esperar(1000);
 
-    // --- PARTE 3: Vídeo Maresias ---
+    // PARTE 3: Vídeo Maresias
     introContent.innerHTML = `
         <video id="video1" playsinline autoplay>
             <source src="imagens/ia_ju1.mp4" type="video/mp4">
@@ -74,14 +73,14 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 4: Aprendizados ---
+    // PARTE 4: Aprendizados
     introContent.innerHTML = "<p>Esse ano foi de muitos aprendizados, desafios e conquistas. Todos eles você enfrentou e se saiu muito bem meu amor! ❤️</p>";
     introContent.classList.add('visible');
     await esperar(5000); 
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 5: Duolingo (Slide 2.jpg) ---
+    // PARTE 5: Duolingo
     introContent.innerHTML = `
         <p>Você atingiu o seu objetivo no Duolingo, o que não é para qualquer um! 🦉💚</p>
         <img src="imagens/slide2.jpg" alt="Conquista Duolingo">
@@ -91,7 +90,7 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 6: Mãe (Slide 1.jpg) ---
+    // PARTE 6: Mãe
     introContent.innerHTML = `
         <p>Você enfrentou brigas e provações com a sua mãe, e saiu mais forte e madura delas. 💪🌹</p>
         <img src="imagens/slide1.jpg" alt="Com a mãe">
@@ -101,7 +100,7 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 7: Medicina ---
+    // PARTE 7: Medicina
     introContent.innerHTML = `
         <p>Você vem realizando seu sonho na medicina, estudando, aprendendo e se tornando cada vez mais a grande médica que você vai ser! 🩺👩‍⚕️</p>
     `;
@@ -110,7 +109,7 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 8: Vídeo Médica ---
+    // PARTE 8: Vídeo Médica
     introContent.innerHTML = `
         <video id="video2" playsinline autoplay>
             <source src="imagens/ia_medica.mp4" type="video/mp4">
@@ -121,7 +120,7 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 9: Amor/Dança ---
+    // PARTE 9: Amor/Dança
     introContent.innerHTML = `
         <p>Aproveitando e dançando a vida com o seu grande amor! 💃🕺❤️</p>
     `;
@@ -130,16 +129,37 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 10: Vídeo Juntos (FIM DA INTRO) ---
+    // PARTE 10: Vídeo Juntos
     introContent.innerHTML = `
         <video id="video3" playsinline autoplay>
             <source src="imagens/ia_juntos.mp4" type="video/mp4">
         </video>
     `;
     introContent.classList.add('visible');
+    await esperarVideoTerminar('video3');
+    introContent.classList.remove('visible');
+    await esperar(1000);
+
+    // --- PARTE 11: Palhaça (NOVO) ---
+    // ATENÇÃO: Assumi que o arquivo é .png. Se for .jpg, altere abaixo.
+    introContent.innerHTML = `
+        <p>Engraçado né? Não é só você que sabe ser palhaça 🤡😂</p>
+        <img src="imagens/palhaca.png" alt="Palhaça">
+    `;
+    introContent.classList.add('visible');
+    await esperar(6000);
+    introContent.classList.remove('visible');
+    await esperar(1000);
+
+    // --- PARTE 12: Texto Final Sério (NOVO) ---
+    introContent.innerHTML = `
+        <p style="font-size: 1.2em; font-weight: bold;">
+            Mas agora é sério meu amor, hoje é o seu aniversário mas o maior presente que alguém recebeu fui eu, de ter o privilégio de ter você na minha vida! 🎁❤️✨
+        </p>
+    `;
+    introContent.classList.add('visible');
     
-    // Deixamos este vídeo na tela ao final ou seguimos para outra coisa
-    // Se quiser que pare aqui, basta não fazer mais nada.
+    // FIM DA APRESENTAÇÃO. O texto fica na tela.
 }
 
 // Função auxiliar para esperar vídeos
@@ -149,7 +169,6 @@ function esperarVideoTerminar(idVideo) {
         if(!videoElement) { resolve(); return; }
         
         videoElement.onended = () => resolve();
-        // Fallback de 20s caso o vídeo trave
-        setTimeout(resolve, 20000); 
+        setTimeout(resolve, 20000); // Fallback
     });
 }
