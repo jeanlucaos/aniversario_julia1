@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    text-align: center;
+}
+
+.hello-container, #presentation-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Esconde o contêiner da apresentação/erro até que o usuário interaja */
+.hidden {
+    display: none !important;
+}
+
+h1 {
+    color: #007bff;
+}
+
+/* --- Efeito de Transição (Fade) --- */
+/* Adiciona a transição suave para a opacidade */
+#slide-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px; 
+    border-radius: 8px;
+    margin-bottom: 20px;
+    object-fit: cover; 
+    opacity: 0; /* Começa invisível para o fade-in */
+    transition: opacity 0.5s ease-in-out; /* Duração do fade */
+}
+
+/* Classe que será adicionada pelo JS para fazer aparecer o slide */
+#slide-image.fade-in {
+    opacity: 1;
+}
+
+/* --- Estilos para o Controle de Senha --- */
+#password-area {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espaço entre input e botão */
+    flex-wrap: wrap; /* Quebra de linha para mobile */
+}
+
+#password-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-grow: 1; /* Permite que o input cresça */
+    max-width: 250px;
+}
+
+.error-text {
+    color: red;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+#controls button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#controls button:hover, #start-button:hover {
+    opacity: 0.9;
+}
+
+/* Estilo para o botão de começar (Entrar) */
+#start-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
