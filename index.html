@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação Interativa</title>
+    <title>Arquivo Confidencial</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body> 
 
     <header class="hello-container">
-        <h1>👋 Olá! Bem-vindo(a) à minha Apresentação!</h1>
-        <p>Insira a senha (dica: 1234) para iniciar a experiência interativa.</p>
+        <h1>⚠️ ARQUIVO CONFIDENCIAL PARA JÚLIA FERRARI ⚠️</h1>
+        <p>Insira a credencial de acesso.</p>
+        <p class="hint-text">Dica: Nome do amor da sua vida</p>
         
         <div id="password-area">
             <input type="password" id="password-input" placeholder="Digite a senha">
-            <button id="start-button" onclick="verificarSenha()">Entrar</button>
-            <p id="error-message" class="hidden error-text">Senha incorreta. Tente novamente.</p>
+            <button id="start-button" onclick="verificarSenha()">Acessar</button>
+            <p id="error-message" class="hidden error-text">Acesso negado. Tente novamente.</p>
         </div>
     </header>
 
-    <main id="presentation-container" class="hidden">
-        
-        <img id="slide-image" src="" alt="Slide da apresentação">
+    <div id="intro-container" class="hidden">
+        <div id="intro-content" class="fade-element">
+            </div>
+    </div>
 
+    <main id="presentation-container" class="hidden">
+        <img id="slide-image" src="" alt="Slide da apresentação">
         <div id="controls">
             <h2>O que você deseja fazer agora?</h2>
         </div>
-
         <div id="progress">
             Slide <span id="current-slide">1</span> de 7
         </div>
-
     </main>
 
     <script src="script.js"></script>

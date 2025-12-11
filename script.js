@@ -1,117 +1,64 @@
-const presentationSlides = [
-    { 
-        id: 1, 
-        image: "imagens/slide1.jpg", 
-        options: [
-            { text: "Ir para Slide 2", nextSlide: 2 },
-            { text: "Recomeçar Apresentação", nextSlide: 1 }
-        ] 
-    },
-    // ... (Mantenha o resto dos seus slides 2 a 7 aqui) ...
-    { 
-        id: 2, 
-        image: "imagens/slide2.jpg", 
-        options: [
-            { text: "Opção A (Vai para Slide 3)", nextSlide: 3 },
-            { text: "Opção B (Vai para Slide 4)", nextSlide: 4 } 
-        ] 
-    },
-    { 
-        id: 3, 
-        image: "imagens/slide3.jpg", 
-        options: [
-            { text: "Continuar no Slide 5", nextSlide: 5 }
-        ] 
-    },
-    { 
-        id: 4, 
-        image: "imagens/slide4.jpg", 
-        options: [
-            { text: "Voltar para o Slide 3", nextSlide: 3 },
-            { text: "Seguir para o Slide 5", nextSlide: 5 } 
-        ] 
-    },
-    { 
-        id: 5, 
-        image: "imagens/slide5.jpg", 
-        options: [
-            { text: "Avançar para o Slide 6", nextSlide: 6 }
-        ] 
-    },
-    { 
-        id: 6, 
-        image: "imagens/slide6.jpg", 
-        options: [
-            { text: "Ir para o Slide 7 (Final)", nextSlide: 7 },
-            { text: "Voltar para o Slide 1", nextSlide: 1 }
-        ] 
-    },
-    { 
-        id: 7, 
-        image: "imagens/slide7.jpg", 
-        options: [
-            { text: "🎉 Fim da Apresentação! Recomeçar.", nextSlide: 1 }
-        ] 
-    }
-];
+// Configurações
+const CORRECT_PASSWORD = "jean luca"; 
+const introContent = document.getElementById('intro-content');
+const introContainer = document.getElementById('intro-container');
 
-let currentSlideIndex = 0; 
-const CORRECT_PASSWORD = "1234"; // << Sua senha
-
-// --- FUNÇÃO DE SENHA ---
+// --- FUNÇÃO DE VERIFICAÇÃO DE SENHA ---
 function verificarSenha() {
     const input = document.getElementById('password-input').value;
     const errorMessage = document.getElementById('error-message');
 
-    if (input === CORRECT_PASSWORD) {
-        errorMessage.classList.add('hidden'); // Esconde erro
-        iniciarApresentacao(); // Inicia a apresentação
+    // Converte o que foi digitado para minúsculo e compara
+    if (input.toLowerCase() === CORRECT_PASSWORD) {
+        errorMessage.classList.add('hidden');
+        document.querySelector('.hello-container').classList.add('hidden');
+        iniciarIntro(); // Começa a sequência especial
     } else {
-        errorMessage.classList.remove('hidden'); // Mostra erro
+        errorMessage.classList.remove('hidden');
     }
 }
 
-// --- FUNÇÃO DE INÍCIO DA APRESENTAÇÃO ---
-function iniciarApresentacao() {
-    document.querySelector('.hello-container').classList.add('hidden');
-    document.getElementById('presentation-container').classList.remove('hidden');
-    showSlide(1); // Exibe o Slide 1
+// --- SEQUÊNCIA DE INTRODUÇÃO (Textos -> Vídeo) ---
+// Função auxiliar para esperar um tempo (em milissegundos)
+const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function iniciarIntro() {
+    // 1. Mostra o container da intro
+    introContainer.classList.remove('hidden');
+
+    // --- PARTE 1: "Os 27 da Jú" ---
+    introContent.innerHTML = "<h2>✨ Os 27 da Jú ✨</h2>";
+    // Pequeno delay para o navegador renderizar antes do fade-in
+    await esperar(100); 
+    introContent.classList.add('visible'); // Fade IN
+    
+    await esperar(3000); // Fica na tela por 3 segundos
+    
+    introContent.classList.remove('visible'); // Fade OUT
+    await esperar(1000); // Espera o fade out terminar
+
+    // --- PARTE 2: Texto Longo ---
+    introContent.innerHTML = "<p>Essa história começa em Maresias, litoral de São Paulo, na comemoração dos 26, em que Júlia agradece mais um ano de vida e pede muitas bençãos para o ano que vinha aí...</p>";
+    introContent.classList.add('visible'); // Fade IN
+    
+    await esperar(6000); // Fica na tela por 6 segundos (tempo para ler)
+    
+    introContent.classList.remove('visible'); // Fade OUT
+    await esperar(1000);
+
+    // --- PARTE 3: O Vídeo ---
+    // Inserimos a tag de vídeo HTML
+    introContent.innerHTML = `
+        <video controls autoplay>
+            <source src="imagens/ia_ju1.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos.
+        </video>
+    `;
+    introContent.classList.add('visible'); // Fade IN do vídeo
+    
+    // O vídeo deve começar automaticamente devido ao atributo 'autoplay'.
+    // A partir daqui, o código para (aguardando suas próximas instruções sobre o que fazer depois do vídeo).
 }
 
-// --- FUNÇÃO PRINCIPAL DE EXIBIÇÃO DE SLIDE (COM FADE) ---
-function showSlide(slideNumber) {
-    const slide = presentationSlides[slideNumber - 1]; 
-    const slideImage = document.getElementById('slide-image');
-
-    if (!slide) {
-        console.error("Slide não encontrado:", slideNumber);
-        return;
-    }
-
-    currentSlideIndex = slideNumber - 1;
-
-    // 1. Remove a classe 'fade-in' (Faz a imagem desaparecer)
-    slideImage.classList.remove('fade-in');
-
-    // Usamos setTimeout para dar tempo do fade-out acontecer antes de mudar a imagem
-    setTimeout(() => {
-        // 2. Atualiza o conteúdo da imagem
-        slideImage.src = slide.image;
-        document.getElementById('current-slide').textContent = slide.id;
-
-        // 3. Adiciona a classe 'fade-in' (Faz a nova imagem aparecer suavemente)
-        slideImage.classList.add('fade-in');
-
-        // 4. Atualiza os botões
-        const controlsDiv = document.getElementById('controls');
-        controlsDiv.innerHTML = '<h2>O que você deseja fazer agora?</h2>'; 
-
-        slide.options.forEach(option => {
-            const button = document.createElement('button');
-            button.textContent = option.text;
-            button.onclick = () => showSlide(option.nextSlide);
-            controlsDiv.appendChild(button);
-        });
-        
-    }, 500); // 500ms é o tempo da transição definido no CSS
-}
+// (O código antigo dos slides foi removido temporariamente para focar nessa intro, 
+// mas podemos trazê-lo de volta depois que o vídeo terminar, se você quiser!)
