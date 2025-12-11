@@ -8,17 +8,25 @@
 </head>
 <body> 
 
+    <audio id="bg-music" loop>
+        <source src="imagens/musica_rick_morty.m4a" type="audio/mp4">
+    </audio>
+
     <header class="hello-container">
         <h1>⚠️ ARQUIVO CONFIDENCIAL PARA JÚLIA FERRARI ⚠️</h1>
         <p>Insira a credencial de acesso.</p>
         <p class="hint-text">Dica: Nome do amor da sua vida</p>
         
         <div id="password-area">
-            <input type="password" id="password-input" placeholder="Digite a senha">
+            <input type="text" id="password-input" placeholder="Digite a senha aqui">
             <button id="start-button" onclick="verificarSenha()">Acessar</button>
             <p id="error-message" class="hidden error-text">Acesso negado. Tente novamente.</p>
         </div>
     </header>
+
+    <div id="countdown-container" class="hidden">
+        <div id="countdown-number">5</div>
+    </div>
 
     <div id="intro-container" class="hidden">
         <div id="intro-content" class="fade-element">
