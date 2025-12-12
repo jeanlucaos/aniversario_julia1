@@ -201,7 +201,7 @@ async function iniciarIntro() {
 
     // PARTE 2: Maresias
     await exibirTextoEVideo(
-        "12 de Dezembro em Maresias, você agradecia mais um ano de vida e pedia muitas bençãos para o próximo ano...",
+        "12/12/24 em Maresias, você agradecia mais um ano de vida e pedia muitas bençãos para o próximo ano...",
         "ia_ju1.mp4",
         "video1"
     );
@@ -209,21 +209,21 @@ async function iniciarIntro() {
     // PARTE 3: Aprendizados
     introContent.innerHTML = "<p>Esse último ano foi de muitos aprendizados, desafios e conquistas. Você os enfrentou com muita garra e se saiu muito bem meu amor! ❤️</p>";
     introContent.classList.add('visible');
-    await esperar(5000); 
+    await esperar(6000); 
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 4: Duolingo
     await carregarImagem("imagens/slide2.jpg");
-    introContent.innerHTML = `<p>Você atingiu o seu objetivo no Duolingo, o que não é para qualquer um! 🦉💚</p><img src="imagens/slide2.jpg" alt="Conquista Duolingo">`;
+    introContent.innerHTML = `<p>Atingiu o seu objetivo no Duolingo, o que não é para qualquer um! 🦉💚</p><img src="imagens/slide2.jpg" alt="Conquista Duolingo">`;
     introContent.classList.add('visible'); 
-    await esperar(5000); 
+    await esperar(4000); 
     introContent.classList.remove('visible'); 
     await esperar(1000);
 
     // PARTE 5: Mãe
     await carregarImagem("imagens/slide1.jpg");
-    introContent.innerHTML = `<p>Você teve embates com a sua mãe, a confrontou, e saiu mais forte e mais madura delas. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
+    introContent.innerHTML = `<p>Teve embates com a sua mãe, a confrontou, e saiu mais forte e mais madura. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
     introContent.classList.add('visible');
     await esperar(5000); 
     introContent.classList.remove('visible');
@@ -231,28 +231,28 @@ async function iniciarIntro() {
 
     // PARTE 6: Medicina
     await exibirTextoEVideo(
-        "Você vem realizando seu sonho com muita coragem e dedicação! Estudando, aprendendo e se aproximando cada vez mais da grande médica que você vai se tornar! 🩺👩‍⚕️",
+        "Está realizando seu sonho com muita coragem e dedicação! Se aproximando cada vez mais da grande médica que você vai se tornar! 🩺👩‍⚕️",
         "ia_medica.mp4",
         "video2"
     );
 
     // PARTE 7: Amor
     await exibirTextoEVideo(
-        "Aproveitando e dançando a vida com o seu amor! 💃🕺❤️",
+        "Aproveitando e dançando a vida junto ao seu amor! 💃🕺❤️",
         "ia_juntos.mp4",
         "video3"
     );
 
     // PARTE 8: Palhaça 
     await carregarImagem("imagens/palhaca.png"); 
-    introContent.innerHTML = `<p>EViu? Não é só você que saber fazer palhaçada 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
+    introContent.innerHTML = `<p>E viu? Não é só você que saber fazer palhaçada hihihi 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
     await esperar(6000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 9: Texto Sério
-    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é seu mas sou eu que ganho o presente, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
+    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é seu mas quem ganha o presente sou eu, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
     introContent.classList.add('visible');
     await esperar(7000);
     introContent.classList.remove('visible');
@@ -267,22 +267,27 @@ async function iniciarIntro() {
 
     // --- PARTE 11: SEQUÊNCIA CUSTOMIZADA DE FOTOS ---
     const customPhotoSequence = [
-        { type: 'image', src: '1.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '2.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '1.jpeg', text: 'Amo quando estamos lindos...', duration: 3000, zoom: true  },
         { type: 'image', src: '4.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '11.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '18.jpeg', text: null, duration: 2000 },
         { type: 'image', src: '12.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '17.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '29.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '32.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '36.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '22.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '38.jpeg', text: null, duration: 2000 },
 
-        { type: 'image', src: '39.jpeg', text: 'Minha parceira de rolê', duration: 2000 },
-        { type: 'image', src: '35.jpeg', text: 'Seja na noite', duration: 2000 },
-        
-        { type: 'image', src: '34.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '33.jpeg', text: '... estilosos, ...', duration: 3000, zoom: true  },
+        { type: 'image', src: '31.jpeg', text: null, duration: 2000 },
         { type: 'image', src: '15.jpeg', text: null, duration: 2000 },
-        
+
+        { type: 'image', src: '9.jpeg', text: '... ou até irreveréntchys, ...', duration: 3000, zoom: true   },
+        { type: 'image', src: '10.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '30.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '24.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '42.jpeg', text: null, duration: 2000 },
+
+
+        { type: 'image', src: '26.jpeg', text: '... mas principalmente quando estamos juntos', duration: 4000, zoom: true  },
+        { type: 'image', src: '27.jpeg', text: null, duration: 3000, zoom: true  },
+
         // AQUI ESTÁ A ALTERAÇÃO: Zoom ativado para 40.jpeg
         { type: 'image', src: '40.jpeg', text: 'Seja no parque...', duration: 2000, zoom: true },
         { type: 'image', src: '25.jpeg', text: 'na praia...', duration: 2000 },
