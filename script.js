@@ -11,15 +11,40 @@ let wakeLock = null; // Variável global para controlar o Wake Lock (mantém a t
 const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // --- Função para Pré-Carregar Imagem ---
-// Isso garante que a foto exista antes de tentarmos mostrá-la
 const carregarImagem = (src) => {
     return new Promise((resolve) => {
         const img = new Image();
         img.src = src;
+        // Resolve a promessa ao carregar ou se houver erro (para não travar o fluxo)
         img.onload = resolve; 
-        img.onerror = resolve; // Segue mesmo se der erro (para não travar)
+        img.onerror = resolve; 
     });
 };
+
+// Função para esperar o vídeo ou uma duração máxima
+function esperarVideoTerminar(idVideo, maxDuration = 20000) {
+    return new Promise(resolve => {
+        const videoElement = document.getElementById(idVideo);
+        if(!videoElement) { 
+            setTimeout(resolve, maxDuration); // Fallback se não encontrar o elemento
+            return; 
+        }
+        
+        // Timeout para garantir que a apresentação não trave caso o evento 'onended' falhe
+        const timeout = setTimeout(() => {
+            if (videoElement.paused === false) {
+                 videoElement.pause(); 
+            }
+            resolve();
+        }, maxDuration);
+
+        // Resolve a promessa quando o vídeo terminar
+        videoElement.onended = () => {
+             clearTimeout(timeout);
+             resolve();
+        };
+    });
+}
 
 // --- 1. VERIFICAÇÃO DE SENHA ---
 function verificarSenha() {
@@ -30,12 +55,8 @@ function verificarSenha() {
         errorMessage.classList.add('hidden');
         document.querySelector('.hello-container').classList.add('hidden');
         
-        music.volume = 0.5; 
-        music.play().catch(e => console.log("Erro no autoplay de áudio:", e));
-
         // Tenta adquirir o Wake Lock (MANTÉM A TELA ACESA)
         if ('wakeLock' in navigator) {
-             // Chamada assíncrona para não bloquear a thread
             navigator.wakeLock.request('screen')
                 .then((lock) => {
                     wakeLock = lock;
@@ -46,7 +67,7 @@ function verificarSenha() {
                 });
         }
 
-        mostrarAvisoVolume(); // Chama o novo aviso de volume
+        mostrarAvisoVolume(); 
     } else {
         // MUDANÇA SOLICITADA: Nova mensagem de erro
         errorMessage.textContent = 'Tá maluca é?👀 Tenta de novo!'; 
@@ -54,7 +75,7 @@ function verificarSenha() {
     }
 }
 
-// --- 2. NOVO AVISO DE VOLUME (Aumente o Volume!!) ---
+// --- 2. AVISO DE VOLUME (Aumente o Volume!!) ---
 async function mostrarAvisoVolume() {
     const volumeContainer = document.getElementById('volume-warning-container');
     const fadeElement = volumeContainer.querySelector('.fade-element');
@@ -62,10 +83,15 @@ async function mostrarAvisoVolume() {
     volumeContainer.classList.remove('hidden');
     fadeElement.classList.add('visible'); 
 
-    // Ouve o clique em qualquer lugar do container para prosseguir
+    // Ouve o clique para prosseguir
     await new Promise(resolve => {
         volumeContainer.addEventListener('click', () => {
             fadeElement.classList.remove('visible'); 
+            
+            // NOVO: A música só toca APÓS o clique
+            music.volume = 0.5; 
+            music.play().catch(e => console.log("Erro no autoplay de áudio:", e));
+
             // Espera a animação de fade-out (1 segundo)
             setTimeout(() => {
                 volumeContainer.classList.add('hidden');
@@ -74,7 +100,6 @@ async function mostrarAvisoVolume() {
         }, { once: true });
     });
     
-    // Após o aviso de volume ser dispensado, inicia a contagem
     iniciarContagem();
 }
 
@@ -94,7 +119,48 @@ async function iniciarContagem() {
     iniciarIntro();
 }
 
-// --- 4. SEQUÊNCIA DA HISTÓRIA ---
+// --- 4. FUNÇÃO PARA EXIBIR MÍDIA CUSTOMIZADA (Texto + Imagem/Vídeo) ---
+async function exibirMidiaCustomizada({ type, src, text, duration }) {
+    const fullSrc = `imagens/casal/${src}`;
+    
+    // 1. Pré-carregamento para carregar texto e mídia juntos
+    if (type === 'image') {
+        await carregarImagem(fullSrc);
+    } 
+    
+    // 2. Montar o HTML
+    let contentHTML = '';
+    if (text) {
+        // Estilo para o texto em destaque
+        contentHTML += `<p style="font-size: 1.5em; font-weight: bold; color: #007bff; margin-bottom: 20px;">${text}</p>`;
+    }
+    
+    if (type === 'image') {
+        contentHTML += `<img src="${fullSrc}" style="max-height: 60vh; border: 2px solid #fff;">`;
+    } else if (type === 'video') {
+        // Vídeo mutado conforme a requisição implícita para não sobrepor o áudio de fundo
+        contentHTML += `<video id="video-seq" playsinline autoplay muted><source src="${fullSrc}" type="video/mp4"></video>`;
+    }
+
+    // 3. Exibir o conteúdo (Fade IN)
+    introContent.innerHTML = contentHTML;
+    introContent.classList.add('visible'); 
+
+    // 4. Esperar a duração
+    if (type === 'image') {
+        await esperar(duration);
+    } else if (type === 'video') {
+        // Vídeo: espera o onended ou a duração máxima
+        await esperarVideoTerminar('video-seq', duration); 
+    }
+    
+    // 5. Fade OUT
+    introContent.classList.remove('visible'); 
+    await esperar(1000); // Espera a animação do CSS terminar
+}
+
+
+// --- 5. SEQUÊNCIA DA HISTÓRIA ---
 async function iniciarIntro() {
     introContainer.classList.remove('hidden');
 
@@ -111,7 +177,7 @@ async function iniciarIntro() {
     introContent.classList.add('visible'); 
     await esperar(6000); 
     introContent.classList.remove('visible'); 
-    await esperar(1000);
+    await esperar(1000); 
 
     introContent.innerHTML = `<video id="video1" playsinline autoplay><source src="imagens/ia_ju1.mp4" type="video/mp4"></video>`;
     introContent.classList.add('visible');
@@ -126,14 +192,16 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // PARTE 4: Duolingo
+    // PARTE 4: Duolingo (IMAGEM COM PRÉ-CARREGAMENTO)
+    await carregarImagem("imagens/slide2.jpg"); // PRÉ-CARREGA A IMAGEM
     introContent.innerHTML = `<p>Você atingiu o seu objetivo no Duolingo, o que não é para qualquer um! 🦉💚</p><img src="imagens/slide2.jpg" alt="Conquista Duolingo">`;
-    introContent.classList.add('visible');
+    introContent.classList.add('visible'); 
     await esperar(5000); 
-    introContent.classList.remove('visible');
+    introContent.classList.remove('visible'); 
     await esperar(1000);
 
-    // PARTE 5: Mãe
+    // PARTE 5: Mãe (IMAGEM COM PRÉ-CARREGAMENTO)
+    await carregarImagem("imagens/slide1.jpg"); // PRÉ-CARREGA A IMAGEM
     introContent.innerHTML = `<p>Você enfrentou brigas e provações com a sua mãe, e saiu mais forte e madura delas. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
     introContent.classList.add('visible');
     await esperar(5000); 
@@ -166,9 +234,8 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // PARTE 8: Palhaça (Com pré-carregamento da imagem para evitar atraso)
-    await carregarImagem("imagens/palhaca.png"); // Pré-carrega a imagem
-
+    // PARTE 8: Palhaça 
+    await carregarImagem("imagens/palhaca.png"); 
     introContent.innerHTML = `<p>Engraçado né? Não é só você que sabe ser palhaça 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
     await esperar(6000);
@@ -182,58 +249,61 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // --- PARTE 10: Cazalsão da Porra ---
+    // PARTE 10: Cazalsão da Porra
     introContent.innerHTML = `<p style="font-size: 1.3em; font-weight: bold; color: #ff4d4d;">Você é o presente na minha vida que me permite ser um cazalsão da porra!! 🔥💏</p>`;
     introContent.classList.add('visible');
     await esperar(5000);
     introContent.classList.remove('visible');
-    await esperar(1000); // Pausa para transição suave
+    await esperar(1000); 
 
-    // --- PARTE 11: Chuva de 50 Fotos (Com inserção de texto e tempo fixo para a foto 8) ---
+    // --- PARTE 11: NOVA SEQUÊNCIA DE FOTOS CUSTOMIZADA ---
+
+    const customPhotoSequence = [
+        // Fotos normais (2 segundos)
+        { type: 'image', src: '1.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '2.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '4.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '11.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '12.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '17.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '29.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '32.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '36.jpeg', text: null, duration: 2000 },
+
+        // Fotos com texto (4 segundos)
+        { type: 'image', src: '39.jpeg', text: 'Minha parceira de rolê', duration: 4000 },
+        { type: 'image', src: '35.jpeg', text: 'Seja na noite', duration: 4000 },
+        
+        // Fotos normais (2 segundos)
+        { type: 'image', src: '34.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '15.jpeg', text: null, duration: 2000 },
+        
+        // Fotos com texto (4 segundos)
+        { type: 'image', src: '40.jpeg', text: 'Seja no parque...', duration: 4000 },
+        { type: 'image', src: '25.jpeg', text: '... na praia.', duration: 4000 },
+        
+        // Vídeo (20 segundos max, ou até terminar)
+        { type: 'video', src: 'carnaval.mp4', text: 'ou até mesmo no carnaval', duration: 20000 }, 
+        
+        // Mais fotos com texto
+        { type: 'image', src: '31.jpeg', text: 'Rolê chique também.', duration: 4000 },
+        
+        // Fotos normais (2 segundos)
+        { type: 'image', src: '33.jpeg', text: null, duration: 2000 },
+        
+        // Fotos com texto (4 segundos)
+        { type: 'image', src: '9.jpeg', text: 'Ou nem tanto', duration: 4000 }
+    ];
     
-    let tempoDeExibicao = 2000; 
-    const tempoMinimo = 1200;   
-
-    for (let i = 1; i <= 50; i++) {
-        const src = `imagens/casal/${i}.jpeg`;
-        let tempoAtual = (i === 50) ? 5000 : tempoDeExibicao; // Padrão ou Última foto (5s)
-
-        // NOVO: Ponto de Inserção de Texto entre a foto 7 e a 8
-        if (i === 8) {
-            // A foto 7 já foi exibida e o fade-out foi completado (pela iteração anterior)
-            
-            // 1. Exibir o texto de transição
-            introContent.innerHTML = `<p style="font-size: 1.5em; font-weight: bold; color: #007bff;">O seu sorriso ilumina a minha vida ✨</p>`;
-            introContent.classList.add('visible'); 
-            await esperar(3000); // Exibe o texto por 3 segundos
-            introContent.classList.remove('visible');
-            await esperar(1000); // Espera o fade-out
-
-            // 2. Define o tempo fixo para a foto 8 (4 segundos)
-            tempoAtual = 4000;
-        }
-
-        // 3. Pré-carrega a imagem ANTES de colocá-la na tela
-        await carregarImagem(src);
-
-        introContent.innerHTML = `<img src="${src}" style="max-height: 60vh; border: 2px solid #fff;">`;
-        introContent.classList.add('visible'); // Fade IN
-        
-        // 4. Aguarda o tempo de exibição (tempo padrão, 5s para a última, ou 4s para a foto 8)
-        await esperar(tempoAtual);
-        
-        // 5. Se não for a última, faz o Fade OUT
-        if (i < 50) {
-            introContent.classList.remove('visible');
-            
-            // 6. Espera a animação do CSS terminar (1000ms = 1s)
-            await esperar(1000); 
-            
-            // 7. Aceleração suave (reduz apenas 5% do tempo a cada foto)
-            tempoDeExibicao = Math.max(tempoMinimo, tempoDeExibicao * 0.95);
-        }
+    for (const item of customPhotoSequence) {
+        await exibirMidiaCustomizada(item);
     }
-    
+
+    // --- FINALIZAÇÃO (Pausa após a última foto) ---
+    introContent.innerHTML = `<p style="font-size: 1.8em; font-weight: bold; color: #ff4d4d;">❤️ Feliz Aniversário, meu amor! ❤️</p>`;
+    introContent.classList.add('visible'); 
+    await esperar(5000); 
+
     // NOVO: Liberar o Wake Lock (Permite que a tela apague novamente)
     if (wakeLock) {
         wakeLock.release()
@@ -242,13 +312,4 @@ async function iniciarIntro() {
                 console.log("Screen Wake Lock Liberado.");
             });
     }
-}
-
-function esperarVideoTerminar(idVideo) {
-    return new Promise(resolve => {
-        const videoElement = document.getElementById(idVideo);
-        if(!videoElement) { resolve(); return; }
-        videoElement.onended = () => resolve();
-        setTimeout(resolve, 20000); 
-    });
 }
