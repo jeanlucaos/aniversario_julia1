@@ -293,11 +293,11 @@ async function iniciarIntro() {
         { type: 'image', src: '10.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '30.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '24.jpeg', text: null, duration: 2000, zoom: true   },
-        { type: 'image', src: '42.jpeg', text: null, duration: 2000, zoom: true   },
 
 
         { type: 'image', src: '26.jpeg', text: 'mas principalmente quando estamos juntos!', duration: 3000, zoom: true  },
-        { type: 'image', src: '37.jpeg', text: null, duration: 3000, zoom: true  },
+        { type: 'image', src: '37.jpeg', text: null, duration: 2000, zoom: true  },
+        { type: 'image', src: '44.jpeg', text: null, duration: 3000, zoom: true  },
 
         { type: 'image', src: '40.jpeg', text: 'Seja no parque, ...', duration: 2000, zoom: true },
         { type: 'image', src: '25.jpeg', text: 'na praia, ...', duration: 2000 },
@@ -306,6 +306,9 @@ async function iniciarIntro() {
 
         { type: 'image', src: '5.jpeg', text: 'o seu olhar me abastece a alma!', duration: 2000, zoom: true  },
         { type: 'image', src: '23.jpeg', text: null, duration: 2000, zoom: true  },
+        { type: 'image', src: '43.jpeg', text: null, duration: 2000, zoom: true  },
+
+        { type: 'video', src: 'final.mp4', text: null, duration: 20000 },
     ];
     
     for (const item of customPhotoSequence) {
