@@ -197,13 +197,13 @@ async function iniciarIntro() {
 
     // PARTE 2: Maresias (TEXTO + VÍDEO JUNTOS)
     await exibirTextoEVideo(
-        "Essa história começa em Maresias, litoral de São Paulo, na comemoração dos 26, em que Júlia agradece mais um ano de vida e pede muitas bençãos para o ano que vinha aí...",
+        "12 de Dezembro em Maresias, você agradecia mais um ano de vida e pedia muitas bençãos para o próximo ano...",
         "ia_ju1.mp4",
         "video1"
     );
 
     // PARTE 3: Aprendizados
-    introContent.innerHTML = "<p>Esse ano foi de muitos aprendizados, desafios e conquistas. Todos eles você enfrentou e se saiu muito bem meu amor! ❤️</p>";
+    introContent.innerHTML = "<p>Esse último ano foi de muitos aprendizados, desafios e conquistas. Você os enfrentou com muita garra e se saiu muito bem meu amor! ❤️</p>";
     introContent.classList.add('visible');
     await esperar(5000); 
     introContent.classList.remove('visible');
@@ -219,7 +219,7 @@ async function iniciarIntro() {
 
     // PARTE 5: Mãe
     await carregarImagem("imagens/slide1.jpg");
-    introContent.innerHTML = `<p>Você enfrentou brigas e provações com a sua mãe, e saiu mais forte e madura delas. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
+    introContent.innerHTML = `<p>Você teve embates com a sua mãe, a confrontou, e saiu mais forte e mais madura delas. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
     introContent.classList.add('visible');
     await esperar(5000); 
     introContent.classList.remove('visible');
@@ -227,35 +227,35 @@ async function iniciarIntro() {
 
     // PARTE 6: Medicina (TEXTO + VÍDEO JUNTOS)
     await exibirTextoEVideo(
-        "Você vem realizando seu sonho na medicina, estudando, aprendendo e se tornando cada vez mais a grande médica que você vai ser! 🩺👩‍⚕️",
+        "Você vem realizando seu sonho com muita coragem e dedicação! Estudando, aprendendo e se aproximando cada vez mais da grande médica que você vai se tornar! 🩺👩‍⚕️",
         "ia_medica.mp4",
         "video2"
     );
 
     // PARTE 7: Amor (TEXTO + VÍDEO JUNTOS)
     await exibirTextoEVideo(
-        "Aproveitando e dançando com o amor da sua vida! 💃🕺❤️",
+        "Aproveitando e dançando a vida com o seu amor! 💃🕺❤️",
         "ia_juntos.mp4",
         "video3"
     );
 
     // PARTE 8: Palhaça 
     await carregarImagem("imagens/palhaca.png"); 
-    introContent.innerHTML = `<p>Engraçado né? Não é só você que sabe ser palhaça 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
+    introContent.innerHTML = `<p>EViu? Não é só você que saber fazer palhaçada 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
     await esperar(6000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 9: Texto Sério
-    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje é o seu aniversário mas o maior presente que alguém recebeu fui eu, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
+    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é seu mas sou eu que ganho o presente, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
     introContent.classList.add('visible');
     await esperar(7000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 10: Cazalsão da Porra
-    introContent.innerHTML = `<p style="font-size: 1.3em; font-weight: bold; color: #ff4d4d;">Você é o presente na minha vida que me permite ser um cazalsão da porra!! 🔥💏</p>`;
+    introContent.innerHTML = `<p style="font-size: 1.3em; font-weight: bold; color: #ff4d4d;">Você é a razão da minha vida ser mais brilhante! 🔥💏</p>`;
     introContent.classList.add('visible');
     await esperar(5000);
     introContent.classList.remove('visible');
@@ -273,20 +273,20 @@ async function iniciarIntro() {
         { type: 'image', src: '32.jpeg', text: null, duration: 2000 },
         { type: 'image', src: '36.jpeg', text: null, duration: 2000 },
 
-        { type: 'image', src: '39.jpeg', text: 'Minha parceira de rolê', duration: 4000 },
-        { type: 'image', src: '35.jpeg', text: 'Seja na noite', duration: 4000 },
+        { type: 'image', src: '39.jpeg', text: 'Minha parceira de rolê', duration: 2000 },
+        { type: 'image', src: '35.jpeg', text: 'Seja na noite', duration: 2000 },
         
         { type: 'image', src: '34.jpeg', text: null, duration: 2000 },
         { type: 'image', src: '15.jpeg', text: null, duration: 2000 },
         
-        { type: 'image', src: '40.jpeg', text: 'Seja no parque...', duration: 4000 },
-        { type: 'image', src: '25.jpeg', text: '... na praia.', duration: 4000 },
+        { type: 'image', src: '40.jpeg', text: 'Seja no parque...', duration: 2000 },
+        { type: 'image', src: '25.jpeg', text: 'na praia...', duration: 2000 },
         
-        { type: 'video', src: 'carnaval.mp4', text: 'ou até mesmo no carnaval', duration: 20000 }, 
+        { type: 'video', src: 'carnaval.mp4', text: '...ou até mesmo no carnaval', duration: 20000 }, 
         
-        { type: 'image', src: '31.jpeg', text: 'Rolê chique também.', duration: 4000 },
+        { type: 'image', src: '31.jpeg', text: 'Rolê chique também.', duration: 2000 },
         { type: 'image', src: '33.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '9.jpeg', text: 'Ou nem tanto', duration: 4000 }
+        { type: 'image', src: '9.jpeg', text: 'Ou nem tanto', duration: 2000 }
     ];
     
     for (const item of customPhotoSequence) {
