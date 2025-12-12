@@ -273,18 +273,18 @@ async function iniciarIntro() {
         { type: 'image', src: '22.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '38.jpeg', text: null, duration: 2000, zoom: true   },
 
-        { type: 'image', src: '33.jpeg', text: '... estilosos, ...', duration: 2000, zoom: true  },
+        { type: 'image', src: '33.jpeg', text: 'estilosos,...', duration: 2000, zoom: true  },
         { type: 'image', src: '31.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '15.jpeg', text: null, duration: 2000, zoom: true   },
 
-        { type: 'image', src: '9.jpeg', text: '... ou até irreveréntchys, ...', duration: 2000, zoom: true   },
+        { type: 'image', src: '9.jpeg', text: 'ou até irreveréntchys,...', duration: 3000, zoom: true   },
         { type: 'image', src: '10.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '30.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '24.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '42.jpeg', text: null, duration: 2000, zoom: true   },
 
 
-        { type: 'image', src: '26.jpeg', text: '... mas principalmente quando estamos juntos', duration: 3000, zoom: true  },
+        { type: 'image', src: '26.jpeg', text: 'mas principalmente quando estamos juntos', duration: 3000, zoom: true  },
         { type: 'image', src: '27.jpeg', text: null, duration: 3000, zoom: true  },
 
         // AQUI ESTÁ A ALTERAÇÃO: Zoom ativado para 40.jpeg
