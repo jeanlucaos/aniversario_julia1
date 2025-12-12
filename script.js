@@ -195,7 +195,7 @@ async function iniciarIntro() {
     
     await esperar(100); 
     introContent.classList.add('visible'); 
-    await esperar(4000); 
+    await esperar(3000); 
     introContent.classList.remove('visible'); 
     await esperar(1000); 
 
@@ -209,7 +209,7 @@ async function iniciarIntro() {
     // PARTE 3: Aprendizados
     introContent.innerHTML = "<p>Esse último ano foi de muitos aprendizados, desafios e conquistas. Você os enfrentou com muita garra e se saiu muito bem meu amor! ❤️</p>";
     introContent.classList.add('visible');
-    await esperar(6000); 
+    await esperar(5000); 
     introContent.classList.remove('visible');
     await esperar(1000);
 
@@ -247,7 +247,7 @@ async function iniciarIntro() {
     await carregarImagem("imagens/palhaca.png"); 
     introContent.innerHTML = `<p>E viu? Não é só você que saber fazer palhaçada hihihi 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
-    await esperar(6000);
+    await esperar(4000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
@@ -267,25 +267,24 @@ async function iniciarIntro() {
 
     // --- PARTE 11: SEQUÊNCIA CUSTOMIZADA DE FOTOS ---
     const customPhotoSequence = [
-        { type: 'image', src: '1.jpeg', text: 'Amo quando estamos lindos...', duration: 3000, zoom: true  },
-        { type: 'image', src: '4.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '18.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '12.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '22.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '38.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '1.jpeg', text: 'Amo quando estamos lindos...', duration: 2000, zoom: true  },
+        { type: 'image', src: '18.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '12.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '22.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '38.jpeg', text: null, duration: 2000, zoom: true   },
 
-        { type: 'image', src: '33.jpeg', text: '... estilosos, ...', duration: 3000, zoom: true  },
-        { type: 'image', src: '31.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '15.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '33.jpeg', text: '... estilosos, ...', duration: 2000, zoom: true  },
+        { type: 'image', src: '31.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '15.jpeg', text: null, duration: 2000, zoom: true   },
 
-        { type: 'image', src: '9.jpeg', text: '... ou até irreveréntchys, ...', duration: 3000, zoom: true   },
-        { type: 'image', src: '10.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '30.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '24.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '42.jpeg', text: null, duration: 2000 },
+        { type: 'image', src: '9.jpeg', text: '... ou até irreveréntchys, ...', duration: 2000, zoom: true   },
+        { type: 'image', src: '10.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '30.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '24.jpeg', text: null, duration: 2000, zoom: true   },
+        { type: 'image', src: '42.jpeg', text: null, duration: 2000, zoom: true   },
 
 
-        { type: 'image', src: '26.jpeg', text: '... mas principalmente quando estamos juntos', duration: 4000, zoom: true  },
+        { type: 'image', src: '26.jpeg', text: '... mas principalmente quando estamos juntos', duration: 3000, zoom: true  },
         { type: 'image', src: '27.jpeg', text: null, duration: 3000, zoom: true  },
 
         // AQUI ESTÁ A ALTERAÇÃO: Zoom ativado para 40.jpeg
@@ -293,10 +292,7 @@ async function iniciarIntro() {
         { type: 'image', src: '25.jpeg', text: 'na praia...', duration: 2000 },
         
         { type: 'video', src: 'carnaval.mp4', text: '...ou até mesmo no carnaval', duration: 20000 }, 
-        
-        { type: 'image', src: '31.jpeg', text: 'Rolê chique também.', duration: 2000 },
-        { type: 'image', src: '33.jpeg', text: null, duration: 2000 },
-        { type: 'image', src: '9.jpeg', text: 'Ou nem tanto', duration: 2000 }
+
     ];
     
     for (const item of customPhotoSequence) {
@@ -304,7 +300,7 @@ async function iniciarIntro() {
     }
 
     // --- FINALIZAÇÃO ---
-    introContent.innerHTML = `<p style="font-size: 1.8em; font-weight: bold; color: #ff4d4d;">❤️ Feliz Aniversário, meu amor! ❤️</p>`;
+    introContent.innerHTML = `<p style="font-size: 1.8em; font-weight: bold; color: #ff4d4d;">❤️ Você é o Amor da Minha Vida Júlia, Feliz Aniversário! ❤️</p>`;
     introContent.classList.add('visible'); 
     await esperar(5000); 
 
