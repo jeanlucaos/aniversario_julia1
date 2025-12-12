@@ -20,9 +20,8 @@ const carregarImagem = (src) => {
     });
 };
 
-// --- Função Especial: Carregar Texto e Vídeo Juntos (OTIMIZADA) ---
+// --- Função Especial: Carregar Texto e Vídeo Juntos ---
 async function exibirTextoEVideo(texto, videoSrc, videoId) {
-    // 1. Monta o HTML (ainda invisível)
     introContent.innerHTML = `
         <p>${texto}</p>
         <video id="${videoId}" playsinline preload="auto">
@@ -32,34 +31,26 @@ async function exibirTextoEVideo(texto, videoSrc, videoId) {
 
     const videoElement = document.getElementById(videoId);
 
-    // 2. Espera o vídeo estar pronto (Lógica Otimizada para menos espera)
     await new Promise(resolve => {
-        // Se já tiver dados suficientes para o frame atual, segue.
-        // readyState 2 = HAVE_CURRENT_DATA
         if (videoElement.readyState >= 2) {
             resolve();
             return;
         }
         
-        // Timeout reduzido para 3s para evitar tela preta longa
         const timeout = setTimeout(resolve, 3000);
 
         const onReady = () => {
             clearTimeout(timeout);
-            // Remove listeners para limpeza
             videoElement.removeEventListener('loadeddata', onReady);
             videoElement.removeEventListener('canplay', onReady);
             resolve();
         };
 
-        // Tenta disparar o mais rápido possível
         videoElement.addEventListener('loadeddata', onReady);
         videoElement.addEventListener('canplay', onReady);
-        
         videoElement.load();
     });
 
-    // 3. Exibe tudo junto e dá play
     introContent.classList.add('visible');
     try {
         await videoElement.play();
@@ -67,10 +58,8 @@ async function exibirTextoEVideo(texto, videoSrc, videoId) {
         console.log("Autoplay bloqueado ou erro:", e);
     }
 
-    // 4. Espera o vídeo terminar
     await esperarVideoTerminar(videoId);
 
-    // 5. Some com tudo
     introContent.classList.remove('visible');
     await esperar(1000); 
 }
@@ -166,12 +155,11 @@ async function exibirMidiaCustomizada({ type, src, text, duration, zoom }) {
     
     let contentHTML = '';
     
-    // ALTERAÇÃO: Estilo do texto atualizado (Branco, menor fonte)
+    // O texto aqui já está configurado para ser branco e tamanho médio (1.1em)
     if (text) {
         contentHTML += `<p style="font-size: 1.1em; font-weight: bold; color: #ffffff; margin-bottom: 15px;">${text}</p>`;
     }
     
-    // Define se vai ter classe de zoom
     const zoomClass = zoom ? 'zoom-active' : '';
 
     if (type === 'image') {
@@ -294,7 +282,6 @@ async function iniciarIntro() {
         { type: 'image', src: '30.jpeg', text: null, duration: 2000, zoom: true   },
         { type: 'image', src: '24.jpeg', text: null, duration: 2000, zoom: true   },
 
-
         { type: 'image', src: '26.jpeg', text: 'mas principalmente quando estamos juntos!', duration: 3000, zoom: true  },
         { type: 'image', src: '37.jpeg', text: null, duration: 2000, zoom: true  },
         { type: 'image', src: '44.jpeg', text: null, duration: 1000, zoom: true  },
@@ -314,12 +301,44 @@ async function iniciarIntro() {
         await exibirMidiaCustomizada(item);
     }
 
-    // --- FINALIZAÇÃO ---
-    introContent.innerHTML = `<p style="font-size: 1.8em; font-weight: bold; color: #ff4d4d;">❤️ Você é o Amor da Minha Vida Júlia, Feliz Aniversário! ❤️</p>`;
-    introContent.classList.add('visible'); 
-    await esperar(5000); 
+    // --- FINALIZAÇÃO (Alterada) ---
+    // Exibe a foto 34.jpeg com o texto final em branco e fonte menor (usando o padrão da função)
+    await exibirMidiaCustomizada({
+        type: 'image',
+        src: '34.jpeg',
+        text: '❤️ Você é o Amor da Minha Vida Júlia, Feliz Aniversário! ❤️',
+        duration: 5000,
+        zoom: true
+    });
 
-    if (wakeLock) {
-        wakeLock.release().then(() => wakeLock = null);
-    }
+    // --- PÓS-CRÉDITOS: O PRESENTE ---
+    introContent.innerHTML = `
+        <h2 style="margin-bottom: 20px;">Achou que acabou?</h2>
+        <button id="resgatar-btn" class="gift-btn">Resgatar meu Presente 🎁</button>
+    `;
+    introContent.classList.add('visible');
+
+    // Aguarda o clique no botão
+    await new Promise(resolve => {
+        const btn = document.getElementById('resgatar-btn');
+        btn.onclick = () => {
+             // Efeito visual simples de "click"
+             btn.style.transform = "scale(0.9)";
+             setTimeout(resolve, 300);
+        };
+    });
+
+    // Exibe a imagem do passeio em tela cheia
+    introContent.classList.remove('visible');
+    await esperar(500);
+
+    // Carrega imagem do passeio (fora da pasta casal, na raiz de imagens)
+    await carregarImagem("imagens/passeio.png");
+    
+    introContent.innerHTML = `
+        <img src="imagens/passeio.png" class="fullscreen-gift" alt="O Presente">
+    `;
+    introContent.classList.add('visible');
+
+    // Mantém a tela ligada se possível, não removemos o WakeLock aqui intencionalmente.
 }
