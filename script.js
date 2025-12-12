@@ -21,10 +21,8 @@ const carregarImagem = (src) => {
 };
 
 // --- Função Especial: Carregar Texto e Vídeo Juntos ---
-// Garante que o container só apareça quando o vídeo estiver pronto para tocar
 async function exibirTextoEVideo(texto, videoSrc, videoId) {
     // 1. Monta o HTML (ainda invisível)
-    // preload="auto" ajuda a carregar mais rápido
     introContent.innerHTML = `
         <p>${texto}</p>
         <video id="${videoId}" playsinline preload="auto">
@@ -34,22 +32,19 @@ async function exibirTextoEVideo(texto, videoSrc, videoId) {
 
     const videoElement = document.getElementById(videoId);
 
-    // 2. Espera o vídeo estar pronto (canplay) ou um timeout de segurança
+    // 2. Espera o vídeo estar pronto
     await new Promise(resolve => {
-        // Se já estiver pronto, resolve direto
         if (videoElement.readyState >= 3) {
             resolve();
             return;
         }
         
-        // Se demorar mais que 5s, exibe assim mesmo para não travar
         const timeout = setTimeout(resolve, 5000);
 
         videoElement.oncanplay = () => {
             clearTimeout(timeout);
             resolve();
         };
-        // Força o carregamento
         videoElement.load();
     });
 
@@ -98,7 +93,6 @@ function verificarSenha() {
         errorMessage.classList.add('hidden');
         document.querySelector('.hello-container').classList.add('hidden');
         
-        // Tenta manter a tela ligada
         if ('wakeLock' in navigator) {
             navigator.wakeLock.request('screen')
                 .then((lock) => { wakeLock = lock; })
@@ -154,18 +148,22 @@ async function iniciarContagem() {
 }
 
 // --- 4. FUNÇÃO PARA EXIBIR MÍDIA CUSTOMIZADA (FOTOS/VIDEOS FINAIS) ---
-async function exibirMidiaCustomizada({ type, src, text, duration }) {
+async function exibirMidiaCustomizada({ type, src, text, duration, zoom }) {
     const fullSrc = `imagens/casal/${src}`;
     
     if (type === 'image') await carregarImagem(fullSrc);
     
     let contentHTML = '';
+    
     if (text) {
         contentHTML += `<p style="font-size: 1.5em; font-weight: bold; color: #007bff; margin-bottom: 20px;">${text}</p>`;
     }
     
+    // Define se vai ter classe de zoom
+    const zoomClass = zoom ? 'zoom-active' : '';
+
     if (type === 'image') {
-        contentHTML += `<img src="${fullSrc}" style="max-height: 60vh; border: 2px solid #fff;">`;
+        contentHTML += `<img src="${fullSrc}" class="${zoomClass}" style="max-height: 60vh; border: 2px solid #fff; transition: transform 0.5s;">`;
     } else if (type === 'video') {
         contentHTML += `<video id="video-seq" playsinline autoplay muted><source src="${fullSrc}" type="video/mp4"></video>`;
     }
@@ -187,8 +185,7 @@ async function exibirMidiaCustomizada({ type, src, text, duration }) {
 async function iniciarIntro() {
     introContainer.classList.remove('hidden');
 
-    // PARTE 1: Títulos (ALTERADO: COM CAPA)
-    // Pré-carrega a imagem para garantir que apareça junto com o texto
+    // PARTE 1: Títulos (Com Capa)
     await carregarImagem("imagens/capa.png"); 
     
     introContent.innerHTML = `
@@ -196,13 +193,13 @@ async function iniciarIntro() {
         <img src="imagens/capa.png" alt="Capa" style="margin-top: 20px;">
     `;
     
-    await esperar(100); // Pequeno delay para renderização do DOM
+    await esperar(100); 
     introContent.classList.add('visible'); 
-    await esperar(4000); // Exibe por 4 segundos
+    await esperar(4000); 
     introContent.classList.remove('visible'); 
     await esperar(1000); 
 
-    // PARTE 2: Maresias (TEXTO + VÍDEO JUNTOS)
+    // PARTE 2: Maresias
     await exibirTextoEVideo(
         "12 de Dezembro em Maresias, você agradecia mais um ano de vida e pedia muitas bençãos para o próximo ano...",
         "ia_ju1.mp4",
@@ -220,7 +217,7 @@ async function iniciarIntro() {
     await carregarImagem("imagens/slide2.jpg");
     introContent.innerHTML = `<p>Você atingiu o seu objetivo no Duolingo, o que não é para qualquer um! 🦉💚</p><img src="imagens/slide2.jpg" alt="Conquista Duolingo">`;
     introContent.classList.add('visible'); 
-    await esperar(4000); 
+    await esperar(5000); 
     introContent.classList.remove('visible'); 
     await esperar(1000);
 
@@ -228,18 +225,18 @@ async function iniciarIntro() {
     await carregarImagem("imagens/slide1.jpg");
     introContent.innerHTML = `<p>Você teve embates com a sua mãe, a confrontou, e saiu mais forte e mais madura delas. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
     introContent.classList.add('visible');
-    await esperar(4000); 
+    await esperar(5000); 
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // PARTE 6: Medicina (TEXTO + VÍDEO JUNTOS)
+    // PARTE 6: Medicina
     await exibirTextoEVideo(
         "Você vem realizando seu sonho com muita coragem e dedicação! Estudando, aprendendo e se aproximando cada vez mais da grande médica que você vai se tornar! 🩺👩‍⚕️",
         "ia_medica.mp4",
         "video2"
     );
 
-    // PARTE 7: Amor (TEXTO + VÍDEO JUNTOS)
+    // PARTE 7: Amor
     await exibirTextoEVideo(
         "Aproveitando e dançando a vida com o seu amor! 💃🕺❤️",
         "ia_juntos.mp4",
@@ -248,23 +245,23 @@ async function iniciarIntro() {
 
     // PARTE 8: Palhaça 
     await carregarImagem("imagens/palhaca.png"); 
-    introContent.innerHTML = `<p>E viu? Não é só você que saber fazer palhaçada hihihihi 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
+    introContent.innerHTML = `<p>EViu? Não é só você que saber fazer palhaçada 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
-    await esperar(4000);
+    await esperar(6000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 9: Texto Sério
-    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é mas sou eu quem ganha o presente, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
+    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é seu mas sou eu que ganho o presente, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
     introContent.classList.add('visible');
-    await esperar(5000);
+    await esperar(7000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 10: Cazalsão da Porra
     introContent.innerHTML = `<p style="font-size: 1.3em; font-weight: bold; color: #ff4d4d;">Você é a razão da minha vida ser mais brilhante! 🔥💏</p>`;
     introContent.classList.add('visible');
-    await esperar(4000);
+    await esperar(5000);
     introContent.classList.remove('visible');
     await esperar(1000); 
 
@@ -286,7 +283,8 @@ async function iniciarIntro() {
         { type: 'image', src: '34.jpeg', text: null, duration: 2000 },
         { type: 'image', src: '15.jpeg', text: null, duration: 2000 },
         
-        { type: 'image', src: '40.jpeg', text: 'Seja no parque...', duration: 2000 },
+        // AQUI ESTÁ A ALTERAÇÃO: Zoom ativado para 40.jpeg
+        { type: 'image', src: '40.jpeg', text: 'Seja no parque...', duration: 2000, zoom: true },
         { type: 'image', src: '25.jpeg', text: 'na praia...', duration: 2000 },
         
         { type: 'video', src: 'carnaval.mp4', text: '...ou até mesmo no carnaval', duration: 20000 }, 
