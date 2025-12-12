@@ -300,7 +300,7 @@ async function iniciarIntro() {
         { type: 'image', src: '44.jpeg', text: null, duration: 1000, zoom: true  },
 
         { type: 'image', src: '40.jpeg', text: 'Seja no parque, ...', duration: 2000, zoom: true },
-        { type: 'image', src: '25.jpeg', text: 'na praia, ...', duration: 2000 },
+        { type: 'image', src: '25.jpeg', text: 'na praia, ...', duration: 2000, zoom: true  },
         
         { type: 'video', src: 'carnaval.mp4', text: '...ou até mesmo no carnaval', duration: 20000 },
 
