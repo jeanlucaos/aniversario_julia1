@@ -101,7 +101,7 @@ function verificarSenha() {
 
         mostrarAvisoVolume(); 
     } else {
-        errorMessage.textContent = 'Tá maluca é? 👀 Tenta de novo!'; 
+        errorMessage.textContent = 'Tá maluca é? 👀 1Tenta de novo!'; 
         errorMessage.classList.remove('hidden');
     }
 }
