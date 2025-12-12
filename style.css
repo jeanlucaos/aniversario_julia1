@@ -27,7 +27,7 @@ html, body {
     border: 1px solid #333;
     position: relative;
     z-index: 10;
-    max-height: 90vh; 
+    max-height: 95vh; /* Aumentei um pouco para caber texto+video */
     overflow-y: auto;
     box-sizing: border-box;
     display: flex;
@@ -46,7 +46,7 @@ html, body {
     z-index: 100;
     color: #e0e0e0;
     font-size: 1.5em;
-    cursor: pointer; /* Indica que é clicável */
+    cursor: pointer; 
     text-align: center;
 }
 .fullscreen-message h2 {
@@ -134,7 +134,7 @@ h1 {
     justify-content: center;
     flex-direction: column;
     opacity: 0;
-    /* TRANSIÇÃO MAIS SUAVE: 1 segundo com ease-in-out */
+    /* Transição suave de opacidade */
     transition: opacity 1s ease-in-out;
     text-align: center;
 }
@@ -145,7 +145,8 @@ h1 {
 #intro-content video, #intro-content img {
     width: auto;
     max-width: 100%;
-    max-height: 55vh; 
+    /* Reduzi para 45vh para caber melhor com o texto junto */
+    max-height: 45vh; 
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
