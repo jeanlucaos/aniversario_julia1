@@ -8,7 +8,7 @@
 </head>
 <body> 
 
-    <audio id="bg-music" loop>
+    <audio id="bg-music">
         <source src="imagens/musica_rick_morty.m4a" type="audio/mp4">
     </audio>
 
@@ -23,6 +23,13 @@
             <p id="error-message" class="hidden error-text">Acesso negado. Tente novamente.</p>
         </div>
     </header>
+
+    <div id="volume-warning-container" class="hidden fullscreen-message">
+        <div class="fade-element">
+            <h2>Aumente o Volume!! 🔊</h2>
+            <p style="margin-top: 20px;">(Pressione para continuar)</p>
+        </div>
+    </div>
 
     <div id="countdown-container" class="hidden">
         <div id="countdown-number">3</div>

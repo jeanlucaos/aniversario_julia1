@@ -5,6 +5,8 @@ const introContent = document.getElementById('intro-content');
 const introContainer = document.getElementById('intro-container');
 const music = document.getElementById('bg-music');
 
+let wakeLock = null; // Variável global para controlar o Wake Lock (mantém a tela ligada)
+
 // Função auxiliar 'Promessa' para pausas
 const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -31,13 +33,52 @@ function verificarSenha() {
         music.volume = 0.5; 
         music.play().catch(e => console.log("Erro no autoplay de áudio:", e));
 
-        iniciarContagem();
+        // Tenta adquirir o Wake Lock (MANTÉM A TELA ACESA)
+        if ('wakeLock' in navigator) {
+             // Chamada assíncrona para não bloquear a thread
+            navigator.wakeLock.request('screen')
+                .then((lock) => {
+                    wakeLock = lock;
+                    console.log("Screen Wake Lock Ativo!");
+                })
+                .catch((err) => {
+                    console.log("Falha ao adquirir Wake Lock:", err);
+                });
+        }
+
+        mostrarAvisoVolume(); // Chama o novo aviso de volume
     } else {
+        // MUDANÇA SOLICITADA: Nova mensagem de erro
+        errorMessage.textContent = 'Tá maluca é?👀 Tenta de novo!'; 
         errorMessage.classList.remove('hidden');
     }
 }
 
-// --- 2. CONTAGEM REGRESSIVA (3 a 1) ---
+// --- 2. NOVO AVISO DE VOLUME (Aumente o Volume!!) ---
+async function mostrarAvisoVolume() {
+    const volumeContainer = document.getElementById('volume-warning-container');
+    const fadeElement = volumeContainer.querySelector('.fade-element');
+
+    volumeContainer.classList.remove('hidden');
+    fadeElement.classList.add('visible'); 
+
+    // Ouve o clique em qualquer lugar do container para prosseguir
+    await new Promise(resolve => {
+        volumeContainer.addEventListener('click', () => {
+            fadeElement.classList.remove('visible'); 
+            // Espera a animação de fade-out (1 segundo)
+            setTimeout(() => {
+                volumeContainer.classList.add('hidden');
+                resolve();
+            }, 1000); 
+        }, { once: true });
+    });
+    
+    // Após o aviso de volume ser dispensado, inicia a contagem
+    iniciarContagem();
+}
+
+// --- 3. CONTAGEM REGRESSIVA (3 a 1) ---
 async function iniciarContagem() {
     const countdownContainer = document.getElementById('countdown-container');
     const countdownNumber = document.getElementById('countdown-number');
@@ -53,7 +94,7 @@ async function iniciarContagem() {
     iniciarIntro();
 }
 
-// --- 3. SEQUÊNCIA DA HISTÓRIA ---
+// --- 4. SEQUÊNCIA DA HISTÓRIA ---
 async function iniciarIntro() {
     introContainer.classList.remove('hidden');
 
@@ -125,7 +166,9 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000);
 
-    // PARTE 8: Palhaça
+    // PARTE 8: Palhaça (Com pré-carregamento da imagem para evitar atraso)
+    await carregarImagem("imagens/palhaca.png"); // Pré-carrega a imagem
+
     introContent.innerHTML = `<p>Engraçado né? Não é só você que sabe ser palhaça 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
     await esperar(6000);
@@ -146,39 +189,58 @@ async function iniciarIntro() {
     introContent.classList.remove('visible');
     await esperar(1000); // Pausa para transição suave
 
-    // --- PARTE 11: Chuva de 50 Fotos (Melhorada) ---
+    // --- PARTE 11: Chuva de 50 Fotos (Com inserção de texto e tempo fixo para a foto 8) ---
     
-    // Começa com 2 segundos por foto (bem tranquilo)
     let tempoDeExibicao = 2000; 
-    // Limite mínimo de 1.2 segundos (para dar tempo de carregar e ver)
     const tempoMinimo = 1200;   
 
     for (let i = 1; i <= 50; i++) {
         const src = `imagens/casal/${i}.jpeg`;
+        let tempoAtual = (i === 50) ? 5000 : tempoDeExibicao; // Padrão ou Última foto (5s)
 
-        // 1. Pré-carrega a imagem ANTES de colocá-la na tela
-        // Isso evita que a tela fique preta ou piscando
+        // NOVO: Ponto de Inserção de Texto entre a foto 7 e a 8
+        if (i === 8) {
+            // A foto 7 já foi exibida e o fade-out foi completado (pela iteração anterior)
+            
+            // 1. Exibir o texto de transição
+            introContent.innerHTML = `<p style="font-size: 1.5em; font-weight: bold; color: #007bff;">O seu sorriso ilumina a minha vida ✨</p>`;
+            introContent.classList.add('visible'); 
+            await esperar(3000); // Exibe o texto por 3 segundos
+            introContent.classList.remove('visible');
+            await esperar(1000); // Espera o fade-out
+
+            // 2. Define o tempo fixo para a foto 8 (4 segundos)
+            tempoAtual = 4000;
+        }
+
+        // 3. Pré-carrega a imagem ANTES de colocá-la na tela
         await carregarImagem(src);
-
-        // 2. Define o tempo: Última foto fica 5 segundos
-        let tempoAtual = (i === 50) ? 5000 : tempoDeExibicao;
 
         introContent.innerHTML = `<img src="${src}" style="max-height: 60vh; border: 2px solid #fff;">`;
         introContent.classList.add('visible'); // Fade IN
         
-        // 3. Aguarda o tempo de exibição
+        // 4. Aguarda o tempo de exibição (tempo padrão, 5s para a última, ou 4s para a foto 8)
         await esperar(tempoAtual);
         
-        // 4. Se não for a última, faz o Fade OUT
+        // 5. Se não for a última, faz o Fade OUT
         if (i < 50) {
             introContent.classList.remove('visible');
             
-            // 5. Espera a animação do CSS terminar (1000ms = 1s)
+            // 6. Espera a animação do CSS terminar (1000ms = 1s)
             await esperar(1000); 
             
-            // 6. Aceleração suave (reduz apenas 5% do tempo a cada foto)
+            // 7. Aceleração suave (reduz apenas 5% do tempo a cada foto)
             tempoDeExibicao = Math.max(tempoMinimo, tempoDeExibicao * 0.95);
         }
+    }
+    
+    // NOVO: Liberar o Wake Lock (Permite que a tela apague novamente)
+    if (wakeLock) {
+        wakeLock.release()
+            .then(() => {
+                wakeLock = null;
+                console.log("Screen Wake Lock Liberado.");
+            });
     }
 }
 
