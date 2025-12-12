@@ -101,7 +101,7 @@ function verificarSenha() {
 
         mostrarAvisoVolume(); 
     } else {
-        errorMessage.textContent = 'Tá maluca é?👀 Tenta de novo!'; 
+        errorMessage.textContent = 'Tá maluca é? 👀 Tenta de novo!'; 
         errorMessage.classList.remove('hidden');
     }
 }
@@ -197,7 +197,6 @@ async function iniciarIntro() {
     introContent.classList.add('visible'); 
     await esperar(3000); 
     introContent.classList.remove('visible'); 
-    await esperar(1000); 
 
     // PARTE 2: Maresias
     await exibirTextoEVideo(
@@ -227,7 +226,6 @@ async function iniciarIntro() {
     introContent.classList.add('visible');
     await esperar(5000); 
     introContent.classList.remove('visible');
-    await esperar(1000);
 
     // PARTE 6: Medicina
     await exibirTextoEVideo(
@@ -284,7 +282,7 @@ async function iniciarIntro() {
         { type: 'image', src: '42.jpeg', text: null, duration: 2000, zoom: true   },
 
 
-        { type: 'image', src: '26.jpeg', text: 'mas principalmente quando estamos juntos', duration: 3000, zoom: true  },
+        { type: 'image', src: '26.jpeg', text: 'mas principalmente quando estamos juntos!', duration: 3000, zoom: true  },
         { type: 'image', src: '27.jpeg', text: null, duration: 3000, zoom: true  },
 
         // AQUI ESTÁ A ALTERAÇÃO: Zoom ativado para 40.jpeg
