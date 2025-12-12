@@ -187,11 +187,18 @@ async function exibirMidiaCustomizada({ type, src, text, duration }) {
 async function iniciarIntro() {
     introContainer.classList.remove('hidden');
 
-    // PARTE 1: Títulos
-    introContent.innerHTML = "<h2>✨ Os 27 da Jú ✨</h2>";
-    await esperar(100); 
+    // PARTE 1: Títulos (ALTERADO: COM CAPA)
+    // Pré-carrega a imagem para garantir que apareça junto com o texto
+    await carregarImagem("imagens/capa.png"); 
+    
+    introContent.innerHTML = `
+        <h2>✨ Os 27 da Jú ✨</h2>
+        <img src="imagens/capa.png" alt="Capa" style="margin-top: 20px;">
+    `;
+    
+    await esperar(100); // Pequeno delay para renderização do DOM
     introContent.classList.add('visible'); 
-    await esperar(3000); 
+    await esperar(4000); // Exibe por 4 segundos
     introContent.classList.remove('visible'); 
     await esperar(1000); 
 
@@ -213,7 +220,7 @@ async function iniciarIntro() {
     await carregarImagem("imagens/slide2.jpg");
     introContent.innerHTML = `<p>Você atingiu o seu objetivo no Duolingo, o que não é para qualquer um! 🦉💚</p><img src="imagens/slide2.jpg" alt="Conquista Duolingo">`;
     introContent.classList.add('visible'); 
-    await esperar(5000); 
+    await esperar(4000); 
     introContent.classList.remove('visible'); 
     await esperar(1000);
 
@@ -221,7 +228,7 @@ async function iniciarIntro() {
     await carregarImagem("imagens/slide1.jpg");
     introContent.innerHTML = `<p>Você teve embates com a sua mãe, a confrontou, e saiu mais forte e mais madura delas. 💪🌹</p><img src="imagens/slide1.jpg" alt="Com a mãe">`;
     introContent.classList.add('visible');
-    await esperar(5000); 
+    await esperar(4000); 
     introContent.classList.remove('visible');
     await esperar(1000);
 
@@ -241,23 +248,23 @@ async function iniciarIntro() {
 
     // PARTE 8: Palhaça 
     await carregarImagem("imagens/palhaca.png"); 
-    introContent.innerHTML = `<p>EViu? Não é só você que saber fazer palhaçada 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
+    introContent.innerHTML = `<p>E viu? Não é só você que saber fazer palhaçada hihihihi 🤡😂</p><img src="imagens/palhaca.png" alt="Palhaça">`;
     introContent.classList.add('visible');
-    await esperar(6000);
+    await esperar(4000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 9: Texto Sério
-    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é seu mas sou eu que ganho o presente, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
+    introContent.innerHTML = `<p style="font-size: 1.2em; font-weight: bold;">Mas agora é sério meu amor, hoje o aniversário é mas sou eu quem ganha o presente, de ter o privilégio de ter você na minha vida! 🎁❤️✨</p>`;
     introContent.classList.add('visible');
-    await esperar(7000);
+    await esperar(5000);
     introContent.classList.remove('visible');
     await esperar(1000);
 
     // PARTE 10: Cazalsão da Porra
     introContent.innerHTML = `<p style="font-size: 1.3em; font-weight: bold; color: #ff4d4d;">Você é a razão da minha vida ser mais brilhante! 🔥💏</p>`;
     introContent.classList.add('visible');
-    await esperar(5000);
+    await esperar(4000);
     introContent.classList.remove('visible');
     await esperar(1000); 
 
