@@ -20,7 +20,7 @@ const carregarImagem = (src) => {
     });
 };
 
-// --- Função Especial: Carregar Texto e Vídeo Juntos ---
+// --- Função Especial: Carregar Texto e Vídeo Juntos (OTIMIZADA) ---
 async function exibirTextoEVideo(texto, videoSrc, videoId) {
     // 1. Monta o HTML (ainda invisível)
     introContent.innerHTML = `
@@ -32,19 +32,30 @@ async function exibirTextoEVideo(texto, videoSrc, videoId) {
 
     const videoElement = document.getElementById(videoId);
 
-    // 2. Espera o vídeo estar pronto
+    // 2. Espera o vídeo estar pronto (Lógica Otimizada para menos espera)
     await new Promise(resolve => {
-        if (videoElement.readyState >= 3) {
+        // Se já tiver dados suficientes para o frame atual, segue.
+        // readyState 2 = HAVE_CURRENT_DATA
+        if (videoElement.readyState >= 2) {
             resolve();
             return;
         }
         
-        const timeout = setTimeout(resolve, 5000);
+        // Timeout reduzido para 3s para evitar tela preta longa
+        const timeout = setTimeout(resolve, 3000);
 
-        videoElement.oncanplay = () => {
+        const onReady = () => {
             clearTimeout(timeout);
+            // Remove listeners para limpeza
+            videoElement.removeEventListener('loadeddata', onReady);
+            videoElement.removeEventListener('canplay', onReady);
             resolve();
         };
+
+        // Tenta disparar o mais rápido possível
+        videoElement.addEventListener('loadeddata', onReady);
+        videoElement.addEventListener('canplay', onReady);
+        
         videoElement.load();
     });
 
@@ -101,7 +112,7 @@ function verificarSenha() {
 
         mostrarAvisoVolume(); 
     } else {
-        errorMessage.textContent = 'Tá maluca é? 👀 1Tenta de novo!'; 
+        errorMessage.textContent = 'Tá maluca é? 👀 Tenta de novo!'; 
         errorMessage.classList.remove('hidden');
     }
 }
@@ -155,15 +166,16 @@ async function exibirMidiaCustomizada({ type, src, text, duration, zoom }) {
     
     let contentHTML = '';
     
+    // ALTERAÇÃO: Estilo do texto atualizado (Branco, menor fonte)
     if (text) {
-        contentHTML += `<p style="font-size: 1.5em; font-weight: bold; color: #007bff; margin-bottom: 20px;">${text}</p>`;
+        contentHTML += `<p style="font-size: 1.1em; font-weight: bold; color: #ffffff; margin-bottom: 15px;">${text}</p>`;
     }
     
     // Define se vai ter classe de zoom
     const zoomClass = zoom ? 'zoom-active' : '';
 
     if (type === 'image') {
-        contentHTML += `<img src="${fullSrc}" class="${zoomClass}" style="max-height: 60vh; border: 2px solid #fff; transition: transform 0.5s;">`;
+        contentHTML += `<img src="${fullSrc}" class="${zoomClass}" style="border: 2px solid #fff; transition: transform 0.5s;">`;
     } else if (type === 'video') {
         contentHTML += `<video id="video-seq" playsinline autoplay muted><source src="${fullSrc}" type="video/mp4"></video>`;
     }
@@ -287,7 +299,6 @@ async function iniciarIntro() {
         { type: 'image', src: '26.jpeg', text: 'mas principalmente quando estamos juntos!', duration: 3000, zoom: true  },
         { type: 'image', src: '37.jpeg', text: null, duration: 3000, zoom: true  },
 
-        // AQUI ESTÁ A ALTERAÇÃO: Zoom ativado para 40.jpeg
         { type: 'image', src: '40.jpeg', text: 'Seja no parque, ...', duration: 2000, zoom: true },
         { type: 'image', src: '25.jpeg', text: 'na praia, ...', duration: 2000 },
         

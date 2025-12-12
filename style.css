@@ -144,12 +144,14 @@ h1 {
 #intro-content video, #intro-content img {
     width: auto;
     max-width: 100%;
-    max-height: 45vh; 
+    /* AUMENTADO: De 45vh para 60vh para ficarem maiores */
+    max-height: 60vh; 
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    margin-top: 15px;
-    margin-bottom: 15px;
+    /* Margens reduzidas para caber melhor o texto */
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #intro-content p {
